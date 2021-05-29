@@ -41,6 +41,14 @@ class GoodsList {
     this.goods = [];
   }
 
+  calculateTotal() {
+    let total = 0;
+    this.goods.forEach((good) => {
+      total += good.price;
+    });
+    return total;
+  }
+
   fetchGoods() {
     this.goods = [
       { title: "Shirt", price: 150 },
@@ -65,3 +73,4 @@ class GoodsList {
 const list = new GoodsList();
 list.fetchGoods();
 list.render();
+alert(list.calculateTotal());
