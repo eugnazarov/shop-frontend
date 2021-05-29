@@ -73,4 +73,5 @@ class GoodsList {
 const list = new GoodsList();
 list.fetchGoods();
 list.render();
-alert(list.calculateTotal());
+let total = list.calculateTotal();
+alert(`total sum: ${total}`);
