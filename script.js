@@ -1,3 +1,6 @@
+const API =
+  "https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses";
+
 class GoodsItem {
   constructor(title, price) {
     this.title = title;
@@ -39,6 +42,10 @@ class CartItem {
 class GoodsList {
   constructor() {
     this.goods = [];
+    this._getProducts().then((data) => {
+      this.goods = [...data];
+      this.render();
+    });
   }
 
   calculateTotal() {
@@ -49,21 +56,18 @@ class GoodsList {
     return total;
   }
 
-  fetchGoods() {
-    this.goods = [
-      { title: "Shirt", price: 150 },
-      { title: "Socks", price: 50 },
-      { title: "Jacket", price: 350 },
-      { title: "Boots", price: 150 },
-      { title: "Coat", price: 1250 },
-      { title: "Hat", price: 50 },
-    ];
+  _getProducts() {
+    return fetch(`${API}/catalogData.json`)
+      .then((result) => result.json())
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   render() {
     let listHtml = "";
     this.goods.forEach((good) => {
-      const goodsItem = new GoodsItem(good.title, good.price);
+      const goodsItem = new GoodsItem(good.product_name, good.price);
       listHtml += goodsItem.render();
     });
     document.querySelector(".goods-list").innerHTML = listHtml;
@@ -71,7 +75,3 @@ class GoodsList {
 }
 
 const list = new GoodsList();
-list.fetchGoods();
-list.render();
-let total = list.calculateTotal();
-alert(`total sum: ${total}`);
