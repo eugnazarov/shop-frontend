@@ -21,13 +21,37 @@ class GoodsItem {
 class Cart {
   constructor() {
     this.items = [];
+    this.getItems().then((data) => {
+      this.items = [...data.contents];
+      this.render();
+    });
   }
 
   //Cart methods
-  addItem() {}
-  removeItem() {}
-  calculateTotal() {}
-  applyDiscount() {}
+
+  addItem() {
+    return fetch(`${API}/addToBasket.json`).then((result) => result.json);
+  }
+  removeItem() {
+    return fetch(`${API}/deleteFromBasket.json`).then((result) => result.json);
+  }
+
+  getItems() {
+    return fetch(`${API}/getBasket.json`)
+      .then((result) => result.json())
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  render() {
+    let listHtml = "";
+    this.items.forEach((item) => {
+      const cartItem = new Cart(item.product_name, item.price);
+      listHtml += cartItem.render();
+    });
+    document.querySelector(".cart").innerHTML = listHtml;
+  }
 }
 
 class CartItem {
@@ -36,7 +60,15 @@ class CartItem {
     this.price = price;
   }
 
-  render() {}
+  render() {
+    return `
+    <div class="cart-item">
+    <img src="" width=150 height = 150></img>
+    <h3>${this.title}</h3>
+    <p>${this.price}</p>
+    </div>
+    `;
+  }
 }
 
 class GoodsList {
@@ -75,3 +107,4 @@ class GoodsList {
 }
 
 const list = new GoodsList();
+const cart = new Cart();
