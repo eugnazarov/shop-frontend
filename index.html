@@ -13,16 +13,49 @@
     />
   </head>
   <body>
-    <header class="header">
-      <div class="container">
-        <div class="header__container">
-          <button class="cart-button" type="submit">Корзина</button>
+    <div id="app">
+      <header class="header">
+        <div class="container">
+          <div class="header__container">
+            <h1 class="logo">E-shop</h1>
+            <input v-model="search" type="text" placeholder="Поиск">
+            <button @click="showCart" class="cart-button" type="submit">Корзина</button>
+        
+           
+          </div>
         </div>
-      </div>
-    </header>
-    <main class="main container">
-      <div class="goods-list"></div>
-    </main>
+      </header>
+      <main class="main container">
+        <div id="cart" class="cart hidden ">
+          <div class="cart-container">
+            <h2>Корзина</h2>
+            <div class="cart-list">
+              <div v-for="item of cartItems">
+                <div class="cart-item">
+                  <h3>{{item.product_name}}: {{item.quantity}}</h3>
+                  <button @click="addItemToCart(item)">+</button>
+                  <button @click="removeItemFromCart(item)">-</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="goods-list">
+          <div v-for="product of products">
+          <div class="goods-item">
+            <img :src="catalogImg" alt="he" />
+            <h3>{{product.product_name}}</h3>
+            <p>Цена: {{product.price}}</p>
+            <button class="item-btn" @click=" putToCart(product)">Добавить в корзину</button>
+          </div>
+        </div>
+        </div>
+        
+          
+        </div>
+      </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <script src="script.js"></script>
   </body>
 </html>

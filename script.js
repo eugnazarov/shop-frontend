@@ -1,77 +1,70 @@
-class GoodsItem {
-  constructor(title, price) {
-    this.title = title;
-    this.price = price;
-  }
+const API =
+  "https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses";
 
-  render() {
-    return `
-    <div class="goods-item">
-    <img src="" width=150 height = 150></img>
-    <h3>${this.title}</h3>
-    <p>${this.price}</p>
-    </div>
-    `;
-  }
-}
+const App = new Vue({
+  el: "#app",
+  data: {
+    catalogUrl: "/catalogData.json",
+    cartUrl: "/getBasket.json",
+    catalogImg: "https://via.placeholder.com/150",
+    products: [],
+    cartItems: [],
+    search: "",
+    cartOpened: false,
+  },
 
-class Cart {
-  constructor() {
-    this.items = [];
-  }
+  methods: {
+    putToCart(product) {
+      if (!this.cartOpened) {
+        this.showCart();
+      }
+      const item = {
+        product_name: product.product_name,
+        quantity: 1,
+        id_product: product.id_product,
+      };
+      let candidate = this.cartItems.find(
+        (el) => el.id_product == item.id_product
+      );
+      console.log(candidate);
+      candidate ? this.addItemToCart(candidate) : this.cartItems.push(item);
+    },
+    addItemToCart(item) {
+      item.quantity++;
+    },
+    removeItemFromCart(item) {
+      item.quantity--;
+      if (item.quantity === 0) {
+        this.cartItems.splice(this.cartItems.indexOf(item), 1);
+      }
+    },
+    getJson(url) {
+      return fetch(url).then((result) => {
+        return result.json();
+      });
+    },
+    loadProducts() {
+      this.getJson(`${API + this.catalogUrl}`).then((data) => {
+        data.forEach((elem) => {
+          this.products.push(elem);
+        });
+      });
+    },
+    loadCart() {
+      this.getJson(`${API + this.cartUrl}`).then((data) => {
+        data.contents.forEach((elem) => {
+          this.cartItems.push(elem);
+        });
+      });
+    },
+    showCart() {
+      document.getElementById("cart").classList.toggle("hidden");
+      this.cartOpened = !this.cartOpened;
+    },
+  },
 
-  //Cart methods
-  addItem() {}
-  removeItem() {}
-  calculateTotal() {}
-  applyDiscount() {}
-}
-
-class CartItem {
-  constructor(title, price) {
-    this.title = title;
-    this.price = price;
-  }
-
-  render() {}
-}
-
-class GoodsList {
-  constructor() {
-    this.goods = [];
-  }
-
-  calculateTotal() {
-    let total = 0;
-    this.goods.forEach((good) => {
-      total += good.price;
-    });
-    return total;
-  }
-
-  fetchGoods() {
-    this.goods = [
-      { title: "Shirt", price: 150 },
-      { title: "Socks", price: 50 },
-      { title: "Jacket", price: 350 },
-      { title: "Boots", price: 150 },
-      { title: "Coat", price: 1250 },
-      { title: "Hat", price: 50 },
-    ];
-  }
-
-  render() {
-    let listHtml = "";
-    this.goods.forEach((good) => {
-      const goodsItem = new GoodsItem(good.title, good.price);
-      listHtml += goodsItem.render();
-    });
-    document.querySelector(".goods-list").innerHTML = listHtml;
-  }
-}
-
-const list = new GoodsList();
-list.fetchGoods();
-list.render();
-let total = list.calculateTotal();
-alert(`total sum: ${total}`);
+  mounted() {
+    this.loadCart();
+    this.loadProducts();
+  },
+});
