@@ -14,6 +14,9 @@ const App = new Vue({
   },
 
   methods: {
+    deleteFromCart(item) {
+      this.cartItems.splice(this.cartItems.indexOf(item), 1);
+    },
     putToCart(product) {
       if (!this.cartOpened) {
         this.showCart();
@@ -35,7 +38,7 @@ const App = new Vue({
     removeItemFromCart(item) {
       item.quantity--;
       if (item.quantity === 0) {
-        this.cartItems.splice(this.cartItems.indexOf(item), 1);
+        this.deleteFromCart(item);
       }
     },
     getJson(url) {
