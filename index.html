@@ -31,22 +31,12 @@
         </div>
       </header>
       <main class="main container">
-        <div id="cart" class="cart hidden ">
-          
-          <div class="cart-container">
-            <h2 class="cart-name">Корзина</h2>
-            <div class="cart-list">
-              <div v-for="item of cartItems" class="cart-item">
-              
-                  <h3 >{{item.product_name}}: {{item.quantity}}</h3>
-                  <button class="cart-btn" @click="addItemToCart(item)">+</button>
-                  <button class="cart-btn" @click="removeItemFromCart(item)">-</button>
-                  <button @click="deleteFromCart(item)" class="cart-delete">удалить</button>
-                
-              </div>
-            </div>
-          </div>
-        </div>
+        <cart :cart-items="cartItems"
+        @remove="removeItemFromCart"
+        @add="addItemToCart"
+        @delete="deleteFromCart"
+
+      ></cart>
         <div class="goods-list">
           <div v-for="product of filtered">
           <div class="goods-item">
@@ -64,5 +54,6 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <script src="script.js"></script>
+    <script src="cartComponent.js"></script>
   </body>
 </html>

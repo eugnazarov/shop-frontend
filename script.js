@@ -16,7 +16,6 @@ const App = new Vue({
 
   methods: {
     filter() {
-      console.log("hello");
       let regexp = new RegExp(this.search, "i");
       this.filtered = this.products.filter((el) =>
         regexp.test(el.product_name)
@@ -37,7 +36,7 @@ const App = new Vue({
       let candidate = this.cartItems.find(
         (el) => el.id_product == item.id_product
       );
-      console.log(candidate);
+
       candidate ? this.addItemToCart(candidate) : this.cartItems.push(item);
     },
     addItemToCart(item) {
