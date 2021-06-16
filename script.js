@@ -16,6 +16,7 @@ const App = new Vue({
 
   methods: {
     filter() {
+
       let regexp = new RegExp(this.search, "i");
       this.filtered = this.products.filter((el) =>
         regexp.test(el.product_name)
