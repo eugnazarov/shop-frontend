@@ -10,10 +10,18 @@ const App = new Vue({
     products: [],
     cartItems: [],
     search: "",
+    filtered: [],
     cartOpened: false,
   },
 
   methods: {
+    filter() {
+      console.log("hello");
+      let regexp = new RegExp(this.search, "i");
+      this.filtered = this.products.filter((el) =>
+        regexp.test(el.product_name)
+      );
+    },
     deleteFromCart(item) {
       this.cartItems.splice(this.cartItems.indexOf(item), 1);
     },
@@ -50,6 +58,7 @@ const App = new Vue({
       this.getJson(`${API + this.catalogUrl}`).then((data) => {
         data.forEach((elem) => {
           this.products.push(elem);
+          this.filtered.push(elem);
         });
       });
     },

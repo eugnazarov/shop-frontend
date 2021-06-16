@@ -18,7 +18,12 @@
         <div class="container">
           <div class="header__container">
             <h1 class="logo">@eShop</h1>
-            <input v-model="search" type="text" placeholder="Поиск">
+            <form action="#" class="search" @submit.prevent="filter">
+              <input type="text" v-model="search">
+              <button type="submit" class="btn-search">
+              Search
+              </button>
+          </form>
             <button @click="showCart" class="cart-button" type="submit">Корзина</button>
         
            
@@ -43,7 +48,7 @@
           </div>
         </div>
         <div class="goods-list">
-          <div v-for="product of products">
+          <div v-for="product of filtered">
           <div class="goods-item">
             <img :src="catalogImg" alt="he" />
             <h3>{{product.product_name}}</h3>
